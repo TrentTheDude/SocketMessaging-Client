@@ -11,6 +11,9 @@ public class Storage {
     public static List<ClientRequest> clientRequestList =  new ArrayList<>();
     public static List<ServerRequest> serverRequestList = new ArrayList<>();
 
+    public static List<ClientRequest> clientRequestListOld =  new ArrayList<>();
+    public static List<ServerRequest> serverRequestListOld = new ArrayList<>();
+
 
 
 }

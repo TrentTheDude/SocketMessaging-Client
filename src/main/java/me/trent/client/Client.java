@@ -6,7 +6,12 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import me.trent.client.eums.DataType;
+import me.trent.client.eums.MessageType;
+import me.trent.client.exceptions.InvalidChannelException;
+import me.trent.client.utils.Utils;
 import me.trent.client.pipeline.ClientPipeline;
+import me.trent.client.request.ClientRequest;
 
 public class Client {
 
@@ -37,7 +42,7 @@ public class Client {
 
 
             channel = bootstrap.connect(getServer(), getPort()).sync().channel();
-            Utils.log("Client Started!");
+            Utils.log("Client: "+getName()+" has Started!");
             setAlive(true); // alive
 
         } catch (Exception e) {
@@ -51,8 +56,8 @@ public class Client {
         return channel;
     }
 
-    public void sendMessage(String message) throws InterruptedException {
-        getChannel().writeAndFlush(message).sync();
+    public void sendMessage(Channel channel, DataType dataType, MessageType messageType, Object data) throws InvalidChannelException {
+        new ClientRequest(channel, dataType, messageType, data).sendRequest();
     }
 
 

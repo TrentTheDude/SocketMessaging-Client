@@ -11,12 +11,14 @@ public class ServerRequest implements RequestI{
     private MessageType messageType;
     private Object data;
     private Channel channel;
+    private boolean sent;
 
     public ServerRequest(Channel channel, DataType dataType, MessageType messageType, Object data){
         this.dataType = dataType;
         this.messageType = messageType;
         this.data = data;
         this.channel = channel;
+        this.sent = false;
 
         Storage.serverRequestList.add(this);
     }
@@ -34,6 +36,16 @@ public class ServerRequest implements RequestI{
     @Override
     public void setDataType(DataType dataType) {
         this.dataType = dataType;
+    }
+
+    @Override
+    public void setSent(boolean set) {
+        this.sent = set;
+    }
+
+    @Override
+    public boolean isSent() {
+        return this.sent;
     }
 
     @Override

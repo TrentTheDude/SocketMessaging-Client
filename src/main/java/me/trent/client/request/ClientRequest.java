@@ -4,6 +4,7 @@ import io.netty.channel.Channel;
 import me.trent.client.Storage;
 import me.trent.client.eums.DataType;
 import me.trent.client.eums.MessageType;
+import me.trent.client.exceptions.InvalidChannelException;
 
 public class ClientRequest implements RequestI {
 
@@ -11,19 +12,27 @@ public class ClientRequest implements RequestI {
     private MessageType messageType;
     private Object data;
     private Channel channel;
+    private boolean sent;
 
     public ClientRequest(Channel channel, DataType dataType, MessageType messageType, Object data){
         this.dataType = dataType;
         this.messageType = messageType;
         this.data = data;
         this.channel = channel;
+        this.sent = false;
 
         Storage.clientRequestList.add(this);
     }
 
     @Override
-    public void sendRequest() {
+    public void sendRequest() throws InvalidChannelException {
+        if (getChannel() == null || !getChannel().isActive()) throw new InvalidChannelException("Invalid or NULL Channel! Cannot send Client Request with NULL channel!");
 
+        getChannel().writeAndFlush(getData()); // send the data...
+        setSent(true);
+        Storage.clientRequestListOld.add(this); // old storage...
+
+        delete();
     }
 
     @Override
@@ -48,6 +57,16 @@ public class ClientRequest implements RequestI {
     @Override
     public void setChannel(Channel channel) {
         this.channel = channel;
+    }
+
+    @Override
+    public void setSent(boolean set) {
+        this.sent = set;
+    }
+
+    @Override
+    public boolean isSent() {
+        return this.sent;
     }
 
     @Override

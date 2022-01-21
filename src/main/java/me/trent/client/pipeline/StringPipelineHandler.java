@@ -2,7 +2,7 @@ package me.trent.client.pipeline;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import me.trent.client.Utils;
+import me.trent.client.utils.Utils;
 
 public class StringPipelineHandler extends
         SimpleChannelInboundHandler<String> {
